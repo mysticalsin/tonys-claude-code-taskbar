@@ -4,7 +4,7 @@ A smart, color-coded status line for [Claude Code](https://claude.com/claude-cod
 
 Built on [ccstatusline](https://github.com/sirmalloc/ccstatusline) with a small shell colorizer (`cc-health.sh`) that turns the raw status JSON into traffic-light signals — now with a **flowing 24-bit rainbow** rule above your input, and **Sam**, a voice layer that lets you *talk to Claude Code* (Superwhisper dictates in; `sam` speaks the reply back via ElevenLabs).
 
-![Tony's Claude Code taskbar — model · effort · dir · git, then context · cost · tokens · burn rate, then 5h/7d usage limits, with a flowing rainbow rule above the input](docs/preview.png)
+![Tony's Claude Code taskbar — model · effort · dir · git, then context · cost · tokens · burn rate, then 5h/7d usage limits, with a flowing rainbow rule above the input](docs/bar.gif)
 
 ---
 
