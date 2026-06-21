@@ -2,7 +2,7 @@
 
 A smart, color-coded status line for [Claude Code](https://claude.com/claude-code) — see your model, thinking effort, context, cost, token burn, and **how close you are to your usage limits** at a glance. Colors and warnings fire automatically as you approach a wall.
 
-Built on [ccstatusline](https://github.com/sirmalloc/ccstatusline) with a small shell colorizer (`cc-health.sh`) that turns the raw status JSON into traffic-light signals — now with a **flowing 24-bit rainbow** rule + rainbow usage bars, and **Sam**, a voice layer that lets you *talk to Claude Code* (Superwhisper dictates in; `sam` speaks the reply back via ElevenLabs).
+Built on [ccstatusline](https://github.com/sirmalloc/ccstatusline) with a small shell colorizer (`cc-health.sh`) that turns the raw status JSON into traffic-light signals — now with a **flowing 24-bit rainbow** rule above your input, and **Sam**, a voice layer that lets you *talk to Claude Code* (Superwhisper dictates in; `sam` speaks the reply back via ElevenLabs).
 
 ![Claude Code statusline preview](docs/statusline.svg)
 
@@ -21,7 +21,7 @@ Built on [ccstatusline](https://github.com/sirmalloc/ccstatusline) with a small 
 - `🔋 5h block` and `📅 7-day` windows: **% used + bar + reset clock (`↻`)**.
 - A burn-rate projection: `ok`, or `⚠cap~25m` when your current pace would hit the limit **before** it resets — the actionable "you're about to run out" signal.
 
-Colors: 🟢 `<70%` · 🟡 `70–89%` · 🔴 `≥90%`. The 5h/7d **bars are a flowing 24-bit rainbow**; the danger color stays on the `%`.
+Colors: 🟢 `<70%` · 🟡 `70–89%` · 🔴 `≥90%`.
 
 **Line 4 — the rainbow**
 - A full-width **flowing truecolor rainbow rule** whose hue rotates every refresh. Pure colour-rich flair; lower `refreshInterval` to ~3 for visible motion.
@@ -58,7 +58,7 @@ Claude Code pipes a JSON blob (model, context, `rate_limits`, `effort`, cost…)
 Claude Code ──JSON──▶ ccstatusline ──JSON on stdin──▶ cc-health.sh ──ANSI──▶ your terminal
 ```
 
-`cc-health.sh` has four modes: `effort`, `ctx`, `limits`, and `rainbow` (the flowing truecolor rule). The `limits` bars are rainbow too.
+`cc-health.sh` has four modes: `effort`, `ctx`, `limits`, and `rainbow` (the flowing truecolor rule above your input).
 
 ---
 

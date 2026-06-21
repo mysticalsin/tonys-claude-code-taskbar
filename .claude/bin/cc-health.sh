@@ -32,7 +32,7 @@ _rb() { # $1 filled  $2 total  $3 off_deg  $4 fillchar  $5 emptychar
 if [ "$mode" = "rainbow" ]; then
   w="${COLUMNS:-60}"; [[ "$w" =~ ^[0-9]+$ ]] || w=60
   (( w>100 )) && w=100; (( w<12 )) && w=44
-  off=$(( ($(date +%s) * 37) % 360 ))
+  off=${RB_OFF:-$(( ($(date +%s) * 37) % 360 ))}
   _rb "$w" "$w" "$off" "─" "─"
   exit 0
 fi
@@ -53,12 +53,6 @@ bar() { # $1 pct  $2 width (default 5)
   for ((i=0;i<f;i++)); do s+="▓"; done
   for ((i=0;i<e;i++)); do s+="░"; done
   printf '%s' "$s"
-}
-rbar() { # $1 pct  $2 width(default 5) — rainbow-filled progress bar
-  local p="${1%%.*}" w="${2:-5}"; [[ "$p" =~ ^[0-9]+$ ]] || p=0
-  (( p<0 )) && p=0; (( p>100 )) && p=100
-  local f=$(( p*w/100 ))
-  _rb "$f" "$w" "$RB_OFF" "▓" "░"
 }
 clock() { # epoch -> HH:MM (local)
   [[ "$1" =~ ^[0-9]+$ ]] || { printf '?'; return; }
@@ -95,7 +89,6 @@ project() { # $1 used%  $2 resets_at  $3 window_sec  [$4 max_horizon_sec] -> "ok
 
 command -v jq >/dev/null 2>&1 || { printf ''; exit 0; }
 now=$(date +%s)
-RB_OFF=$(( (now * 37) % 360 ))   # rainbow phase; rotates each refresh
 
 if [ "$mode" = "effort" ]; then
   lvl=$(jq -r '.effort.level // empty' <<<"$json" 2>/dev/null)
@@ -129,13 +122,13 @@ out=""
 if [ -n "$h5" ] && [ "$h5" != "null" ]; then
   h5i="${h5%%.*}"
   status="$(project "$h5i" "$h5r" 18000)"   # 5h block = 18000s
-  out="🔋5h $(rbar "$h5i" 5) $(col "$h5i")${h5i}%${RST} ${DIM}↻$(clock "$h5r")${RST} ${status}"
+  out="🔋5h $(col "$h5i")$(bar "$h5i") ${h5i}%${RST} ${DIM}↻$(clock "$h5r")${RST} ${status}"
 fi
 if [ -n "$d7" ] && [ "$d7" != "null" ]; then
   d7i="${d7%%.*}"
   d7status="$(project "$d7i" "$d7r" 604800 86400)"   # 7d window; only warn if cap <24h out
   case "$d7status" in *cap*) extra=" ${d7status}";; *) extra="";; esac
   [ -n "$out" ] && out="${out}   "
-  out="${out}📅7d $(rbar "$d7i" 5) $(col "$d7i")${d7i}%${RST} ${DIM}↻$(dayclock "$d7r")${RST}${extra}"
+  out="${out}📅7d $(col "$d7i")$(bar "$d7i") ${d7i}%${RST} ${DIM}↻$(dayclock "$d7r")${RST}${extra}"
 fi
 printf '%s' "$out"
