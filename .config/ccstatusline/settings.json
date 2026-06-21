@@ -21,6 +21,9 @@
     ],
     [
       { "id": "v-limits", "type": "custom-command", "commandPath": "$HOME/.claude/bin/cc-health.sh limits", "preserveColors": true, "timeout": 1000 }
+    ],
+    [
+      { "id": "v-rainbow", "type": "custom-command", "commandPath": "$HOME/.claude/bin/cc-health.sh rainbow", "preserveColors": true, "timeout": 1000 }
     ]
   ],
   "flexMode": "full-minus-40",

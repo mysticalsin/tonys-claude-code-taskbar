@@ -2,7 +2,7 @@
 
 A smart, color-coded status line for [Claude Code](https://claude.com/claude-code) — see your model, thinking effort, context, cost, token burn, and **how close you are to your usage limits** at a glance. Colors and warnings fire automatically as you approach a wall.
 
-Built on [ccstatusline](https://github.com/sirmalloc/ccstatusline) with a small shell colorizer (`cc-health.sh`) that turns the raw status JSON into traffic-light signals.
+Built on [ccstatusline](https://github.com/sirmalloc/ccstatusline) with a small shell colorizer (`cc-health.sh`) that turns the raw status JSON into traffic-light signals — now with a **flowing 24-bit rainbow** rule + rainbow usage bars, and **Sam**, a voice layer that lets you *talk to Claude Code* (Superwhisper dictates in; `sam` speaks the reply back via ElevenLabs).
 
 ![Claude Code statusline preview](docs/statusline.svg)
 
@@ -21,7 +21,29 @@ Built on [ccstatusline](https://github.com/sirmalloc/ccstatusline) with a small 
 - `🔋 5h block` and `📅 7-day` windows: **% used + bar + reset clock (`↻`)**.
 - A burn-rate projection: `ok`, or `⚠cap~25m` when your current pace would hit the limit **before** it resets — the actionable "you're about to run out" signal.
 
-Colors: 🟢 `<70%` · 🟡 `70–89%` · 🔴 `≥90%`.
+Colors: 🟢 `<70%` · 🟡 `70–89%` · 🔴 `≥90%`. The 5h/7d **bars are a flowing 24-bit rainbow**; the danger color stays on the `%`.
+
+**Line 4 — the rainbow**
+- A full-width **flowing truecolor rainbow rule** whose hue rotates every refresh. Pure colour-rich flair; lower `refreshInterval` to ~3 for visible motion.
+
+---
+
+## 🎙️ Sam — talk to Claude Code
+
+No app, no second window. Sam is a Jarvis *inside* Claude Code:
+
+- **Voice in:** [Superwhisper](https://superwhisper.com) — hit your keybind, speak, it dictates into the Claude Code prompt. Claude gets to work.
+- **Voice out (`sam`):** when you want to *hear* the reply, trigger `sam` — it reads Claude's last response aloud via **ElevenLabs** (your key, from the macOS Keychain).
+
+```bash
+# once: store your ElevenLabs key
+security add-generic-password -s samantha-loop -a elevenlabs -w
+
+sam            # speak Claude's most recent reply
+sam "hello"    # speak arbitrary text
+```
+
+Trigger `sam` however you like — a shell alias, a global keybind, or `!sam` in the prompt. Key resolves from `$ELEVENLABS_API_KEY` → Keychain. Voice `21m00Tcm4TlvDq8ikWAM` (Rachel) by default; override with `SAM_VOICE_ID`.
 
 ---
 
@@ -36,7 +58,7 @@ Claude Code pipes a JSON blob (model, context, `rate_limits`, `effort`, cost…)
 Claude Code ──JSON──▶ ccstatusline ──JSON on stdin──▶ cc-health.sh ──ANSI──▶ your terminal
 ```
 
-`cc-health.sh` has three modes: `effort`, `ctx`, `limits`.
+`cc-health.sh` has four modes: `effort`, `ctx`, `limits`, and `rainbow` (the flowing truecolor rule). The `limits` bars are rainbow too.
 
 ---
 
@@ -66,6 +88,7 @@ Then add the status line to your `~/.claude/settings.json` (see [`examples/statu
 |---|---|
 | `.claude/bin/cc-health.sh` | Status colorizer — reads status JSON on stdin, prints colored `effort` / `ctx` / `limits` segments |
 | `.claude/bin/cc-tokens` | On-demand token/cost report across all projects (wraps [ccusage](https://github.com/ryoppippi/ccusage)) |
+| `.claude/bin/sam` | Sam's voice-out — speaks Claude's last reply via ElevenLabs (on demand) |
 | `.config/ccstatusline/settings.json` | ccstatusline widget layout (uses `$HOME` paths — portable) |
 | `examples/statusLine.json` | The `statusLine` snippet to add to your own settings |
 

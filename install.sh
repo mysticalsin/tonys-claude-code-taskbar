@@ -20,9 +20,10 @@ link() { # $1 = path relative to $HOME
 
 link ".claude/bin/cc-health.sh"
 link ".claude/bin/cc-tokens"
+link ".claude/bin/sam"
 link ".config/ccstatusline/settings.json"
 
-chmod +x "$R/.claude/bin/cc-health.sh" "$R/.claude/bin/cc-tokens"
+chmod +x "$R/.claude/bin/cc-health.sh" "$R/.claude/bin/cc-tokens" "$R/.claude/bin/sam"
 
 command -v ccstatusline >/dev/null 2>&1 \
   && echo "ccstatusline: $(ccstatusline --version 2>/dev/null || echo installed)" \
